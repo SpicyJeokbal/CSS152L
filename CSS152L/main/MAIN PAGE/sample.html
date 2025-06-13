@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
             padding: 0;
+            overflow-x: hidden;
+            font-family: 'Merriweather', serif;
         }
         .header {
             width: 100%;
@@ -19,7 +22,7 @@
             background: rgba(255, 255, 255, 0.90);
         }
         .main-content {
-            padding-top: 84px; /* Add padding equal to header height */
+            padding-top: 84px; 
         }
         .card-container {
             position: relative;
@@ -56,7 +59,7 @@
             text-align: center;
             color: black;
             font-size: 20px;
-            font-family: Inter;
+            font-family: 'Montserrat', sans-serif;
             font-weight: 500;
             line-height: 20px;
             transition: all 0.3s ease;
@@ -80,15 +83,19 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
         }
         .carousel-item {
             position: absolute;
-            transition: all 0.5s ease;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            opacity: 0;
+            transform: translateX(-50%) scale(0.8);
         }
         .carousel-item img {
             border-radius: 15px;
-            transition: all 0.5s ease;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         .carousel-item .item-label {
             position: absolute;
@@ -98,13 +105,28 @@
             text-align: center;
             color: black;
             opacity: 0;
-            transition: all 0.5s ease;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .carousel-item .item-label .title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 16px;
+            margin-bottom: 4px;
+        }
+        .carousel-item .item-label .subtitle {
+            font-family: 'Merriweather', serif;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 16px;
+            margin-bottom: 4px;
         }
         .carousel-item.active {
             z-index: 2;
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
         }
         .carousel-item.active img {
-            transform: scale(1.1);
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
         .carousel-item.active .item-label {
@@ -136,11 +158,85 @@
             background: white;
             transform: scale(1.2);
         }
+
+        /* Animation keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* About section elements - initially hidden */
+        .about-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .about-element.left {
+            transform: translateX(-30px);
+        }
+
+        .about-element.right {
+            transform: translateX(30px);
+        }
+
+        .about-element.animate {
+            opacity: 1;
+            transform: translateY(0) translateX(0);
+        }
+
+        .about-element.animate.delay-1 {
+            transition-delay: 0.2s;
+        }
+
+        .about-element.animate.delay-2 {
+            transition-delay: 0.4s;
+        }
+
+        .about-element.animate.delay-3 {
+            transition-delay: 0.6s;
+        }
+
+        .about-element.animate.delay-4 {
+            transition-delay: 0.8s;
+        }
+
+        .about-element.animate.delay-5 {
+            transition-delay: 1s;
+        }
     </style>
 </head>
 <body>
     
-    <div style="width: 100%; min-height: 100vh; position: relative; background: #F8ECEC; overflow-x: hidden; overflow-y: auto; z-index: 0;">
+    <div style="width: 100%; min-height: 100vh; position: relative; background: #F8ECEC; overflow-x: hidden;">
     
     <!-- HEADER (Toolbar) -->
     <div class="header">
@@ -163,70 +259,83 @@
 
     <div class="main-content">
         <!-- MAIN IMAGE SECTION -->
-        <img src="../images/main page/d979b37c-cd0f-416f-8d05-1f83ab54e1dd.jpg"
-            style="width: 100%; height: 540px; object-fit: cover; position: relative; z-index: 1;" />
+        <div style="position: relative;">
+            <img src="../images/main page/d979b37c-cd0f-416f-8d05-1f83ab54e1dd.jpg"
+                style="width: 100%; height: 540px; object-fit: cover; position: relative; z-index: 1;" />
+            <div style="position: absolute; top: 65%; left: 50%; transform: translate(-50%, -50%); z-index: 2; text-align: center;">
+                <h1 style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 20px; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); margin: 0; letter-spacing: 2px;">
+                    WHERE FLAVOR MEETS FIRE
+                </h1>
+            </div>
+        </div>
     </div>
 
     <!-- Cards Section -->
     <div style="position: relative; height: 600px; margin-top: 40px;">
         <div class="card-container" style="position: absolute; left: 262px; top: 0;">
             <img class="card-image" style="width: 350px; height: 428px;" src="../images/main page/117944378_10158540755414547_1326503116057793675_n.jpg" />
-            <div class="card-label" style="left: 65px; top: 368px;">
-                <div class="label-text">WHAT'S NEW</div>
+            <div class="card-label" style="left: 65px; top: 368px; height: 35px;">
+                <div class="label-text" style="font-size: 16px; font-family: 'Montserrat', sans-serif;">WHAT'S NEW</div>
             </div>
         </div>
 
         <div class="card-container" style="position: absolute; left: 626px; top: 0;">
-            <img class="card-image" style="width: 342px; height: 195px;" src="../images/main page/Buffalo's Wings 'n Things (2).JPG" />
-            <div class="card-label" style="left: 81px; top: 145px;">
-                <div class="label-text">MENU</div>
+            <img class="card-image" style="width: 342px; height: 195px;" src="../images/main page/7235285.JPG" />
+            <div class="card-label" style="left: 81px; top: 145px; height: 35px;">
+                <div class="label-text" style="font-size: 16px; font-family: 'Montserrat', sans-serif;">MENU</div>
             </div>
         </div>
 
         <div class="card-container" style="position: absolute; left: 982px; top: 0;">
             <img class="card-image" style="width: 304px; height: 426px;" src="../images/main page/485141724_10162314528994547_3645822391865856742_n.jpg" />
-            <div class="card-label" style="left: 62px; top: 368px;">
-                <div class="label-text">WINGS</div>
+            <div class="card-label" style="left: 62px; top: 368px; height: 35px;">
+                <div class="label-text" style="font-size: 16px; font-family: 'Montserrat', sans-serif;"">WINGS</div>
             </div>
         </div>
 
         <div class="card-container" style="position: absolute; left: 1300px; top: 0;">
             <img class="card-image" style="width: 304px; height: 426px;" src="../images/main page/485800460_10162319934894547_8630561960821771825_n.jpg" />
-            <div class="card-label" style="left: 62px; top: 368px;">
-                <div class="label-text">THINGS</div>
+            <div class="card-label" style="left: 62px; top: 368px; height: 35px;">
+                <div class="label-text" style="font-size: 16px; font-family: 'Montserrat', sans-serif;"">THINGS</div>
             </div>
         </div>
 
         <div class="card-container" style="position: absolute; left: 626px; top: 224px;">
             <img class="card-image" style="width: 342px; height: 204px;" src="../images/main page/1485141724_10162314528994547_3645822391865856742_n.jpg" />
-            <div class="card-label" style="left: 81px; top: 144px;">
-                <div class="label-text">BULK ORDER</div>
+            <div class="card-label" style="left: 81px; top: 144px; height: 35px;">
+                <div class="label-text" style="font-size: 16px; font-family: 'Montserrat', sans-serif;"">BULK ORDER</div>
             </div>
         </div>
     </div>
 
     <!-- BEST SELLER -->
     <div class="best-seller" style="position: relative; top: 0; margin-top: 20px;">
+        <div style="position: absolute; left: 200px; top: 50%; transform: translateY(-50%); z-index: 3;">
+            <div style="font-family: 'Montserrat', sans-serif; font-size: 80px; color: white; line-height: 1;">
+                <span style="font-weight: 400;">BEST</span><br/>
+                <span style="font-weight: 700;">SELLER</span>
+            </div>
+        </div>
         <div class="carousel-container">
             <div class="carousel-item active" style="left: 50%; transform: translateX(-50%);">
-                <img style="width: 444px; height: 275px;" src="https://placehold.co/491x360" />
+                <img style="width: 444px; height: 275px;" src="../images/main page/485141724_10162314528994547_3645822391865856742_n.jpg" />
                 <div class="item-label">
-                    <span style="font-size: 16px; font-family: Inter; font-weight: 700; line-height: 16px;">GO SOLO<br/></span>
-                    <span style="font-size: 16px; font-family: Inter; font-weight: 400; line-height: 16px;">ORIGINAL CHICKEN FINGERS</span>
+                    <div class="title">GO SOLO</div>
+                    <div class="subtitle">ORIGINAL CHICKEN FINGERS</div>
                 </div>
             </div>
             <div class="carousel-item" style="left: 150%; transform: translateX(-50%);">
-                <img style="width: 392px; height: 266px;" src="https://placehold.co/392x266" />
+                <img style="width: 444px; height: 275px;" src="../images/main page/1485141724_10162314528994547_3645822391865856742_n.jpg" />
                 <div class="item-label">
-                    <span style="font-size: 16px; font-family: Inter; font-weight: 700; line-height: 16px;">MAKE IT DOUBLE<br/></span>
-                    <span style="font-size: 16px; font-family: Inter; font-weight: 400; line-height: 16px;">ORIGINAL CHICKEN FINGERS</span>
+                    <div class="title">MAKE IT DOUBLE</div>
+                    <div class="subtitle">ORIGINAL CHICKEN FINGERS</div>
                 </div>
             </div>
             <div class="carousel-item" style="left: -50%; transform: translateX(-50%);">
-                <img style="width: 444px; height: 275px;" src="https://placehold.co/444x275" />
+                <img style="width: 444px; height: 275px;" src="../images/main page/117944378_10158540755414547_1326503116057793675_n.jpg" />
                 <div class="item-label">
-                    <span style="font-size: 16px; font-family: Inter; font-weight: 700; line-height: 16px;">CHEESEBURGER<br/></span>
-                    <span style="font-size: 16px; font-family: Inter; font-weight: 400; line-height: 16px;">NY STYLE</span>
+                    <div class="title">CHEESEBURGER</div>
+                    <div class="subtitle">NY STYLE</div>
                 </div>
             </div>
         </div>
@@ -237,18 +346,64 @@
         </div>
     </div>
 
-    <s cript>
+ 
+    <!-- ABOUT US -->
+    <div id="about-section" style="width: 1920px; height: 1080px; position: relative; background: #ffffff">
+        <div style="width: 1672px; height: 981px; left: 131px; top: 99px; position: absolute; background: #FFCFCF"></div>
+        <div style="width: 622px; height: 422px; left: 0px; top: 11px; position: absolute; opacity: 0.20" class="about-element delay-1"></div>
+        
+        <div style="width: 366px; height: 287px; left: 579px; top: 214px; position: absolute; text-align: right; color: black; font-size: 64px; font-family: Montserrat; font-weight: 700; line-height: 64px; word-wrap: break-word; text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)" class="about-element right delay-2">
+            THIS IS<br/>WHO<br/>WE<br/>ARE
+        </div>
+        
+        <div style="width: 344px; height: 179px; left: 981px; top: 511px; position: absolute; color: black; font-size: 64px; font-family: Montserrat; font-weight: 700; line-height: 64px; word-wrap: break-word; text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)" class="about-element left delay-3">
+            IT'S MORE<br/>THAN<br/>WINGS
+        </div>
+        
+        <div style="width: 804px; left: 579px; top: 803px; position: absolute; color: black; font-size: 64px; font-family: Montserrat; font-weight: 700; line-height: 64px; word-wrap: break-word; text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)" class="about-element delay-4">
+            POWERED BY PASSION
+        </div>
+        
+        <div style="width: 575px; height: 348px; left: 981px; top: 197px; position: absolute; color: rgba(0, 0, 0, 0.85); font-size: 28px; font-family: Lora; font-weight: 400; line-height: 28px; word-wrap: break-word" class="about-element left delay-2">
+            <br/>Buffalo's Wings N' Things isn't just a restaurant. We're the team that brings the heat, the heart, and the hustle — one saucy bite at a time. Buffalo's Wings N' Things Assembly Grounds at The Rise opened its doors in 2019 with one goal in mind: to serve food that fires up your taste buds and brings people together.
+        </div>
+        
+        <div style="width: 575px; height: 348px; left: 370px; top: 488px; position: absolute; text-align: right; color: rgba(0, 0, 0, 0.85); font-size: 28px; font-family: Lora; font-weight: 400; line-height: 28px; word-wrap: break-word" class="about-element right delay-3">
+            <br/>We're not just known for our wings we're known for our saucy attitude. From our signature Champion Buffalo wings to hearty rice meals and game-day favorites, everything we serve is made fresh, bold, and packed with flavor. We believe good food should be exciting, satisfying, and something worth coming back for.
+        </div>
+        
+        <div style="width: 890px; height: 348px; left: 536px; top: 858px; position: absolute; text-align: center; color: rgba(0, 0, 0, 0.85); font-size: 28px; font-family: Lora; font-weight: 400; line-height: 28px; word-wrap: break-word" class="about-element delay-5">
+            <br/>Behind the scenes, we're a tight-knit team with a shared love for great food and great service. We take pride in creating a space where regulars feel at home, newcomers feel welcome, and every plate tells our story.
+        </div>
+        
+        <img style="width: 374px; height: 256px; left: 272px; top: 214px; position: absolute" src="../images/main page/1485141724_10162314528994547_3645822391865856742_n.jpg" class="about-element left delay-1" />
+        <img style="width: 359px; height: 253px; left: 1361px; top: 501px; position: absolute" src="../images/main page/117944378_10158540755414547_1326503116057793675_n.jpg" class="about-element right delay-3" />
+        
+        <div style="width: 687.03px; height: 0px; left: 257.99px; top: 498px; position: absolute; outline: 3px black solid; outline-offset: -1.50px" class="about-element delay-2"></div>
+        <div style="width: 739px; height: 0px; left: 981px; top: 772px; position: absolute; outline: 3px black solid; outline-offset: -1.50px" class="about-element delay-4"></div>
+    </div>
+
+
+    <!--footer-->
+    <div style="width: 100%; height: 300px; position: relative; background: #00809D; margin-top: 40px;"></div>
+
+    <!-- CAROUSEL SCRIPT -->
+    <script>
         const carousel = document.querySelector('.carousel-container');
         const items = document.querySelectorAll('.carousel-item');
         const dots = document.querySelectorAll('.carousel-dot');
         let currentIndex = 0;
+        let isAnimating = false;
 
         function updateCarousel() {
+            if (isAnimating) return;
+            isAnimating = true;
+
             items.forEach((item, index) => {
                 item.classList.remove('active');
                 if (index === currentIndex) {
                     item.style.left = '50%';
-                    item.classList.add('active');
+                    setTimeout(() => item.classList.add('active'), 50);
                 } else if (index === (currentIndex + 1) % items.length) {
                     item.style.left = '150%';
                 } else {
@@ -259,39 +414,76 @@
             dots.forEach((dot, index) => {
                 dot.classList.toggle('active', index === currentIndex);
             });
+
+            setTimeout(() => {
+                isAnimating = false;
+            }, 800); 
         }
 
         function nextSlide() {
+            if (isAnimating) return;
             currentIndex = (currentIndex + 1) % items.length;
             updateCarousel();
         }
 
-        // Auto-advance slides every 5 seconds
-        setInterval(nextSlide, 5000);
+        // Auto-advance slides every 3 seconds
+        setInterval(nextSlide, 3000);
 
-        // Click handlers for dots
         dots.forEach((dot, index) => {
             dot.addEventListener('click', () => {
+                if (isAnimating || currentIndex === index) return;
                 currentIndex = index;
                 updateCarousel();
             });
         });
 
-        // Initial setup
         updateCarousel();
+
+        const aboutSection = document.getElementById('about-section');
+        const aboutElements = document.querySelectorAll('.about-element');
+        let aboutAnimationTriggered = false;
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '-20% 0px -20% 0px', // Trigger when 20% of section is visible
+            threshold: 0
+        };
+
+        const aboutObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !aboutAnimationTriggered) {
+                    aboutAnimationTriggered = true;
+                    
+                    // Add animate class to all about elements
+                    aboutElements.forEach(element => {
+                        element.classList.add('animate');
+                    });
+                }
+            });
+        }, observerOptions);
+
+        aboutObserver.observe(aboutSection);
+
+       
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                if (!aboutAnimationTriggered) {
+                    const aboutRect = aboutSection.getBoundingClientRect();
+                    const windowHeight = window.innerHeight;
+                    
+                  
+                    if (aboutRect.top < windowHeight * 0.8 && aboutRect.bottom > windowHeight * 0.2) {
+                        aboutAnimationTriggered = true;
+                        
+                        aboutElements.forEach(element => {
+                            element.classList.add('animate');
+                        });
+                    }
+                }
+            }, 10);
+        });
     </script>
-
-    <!--footer-->
-    <div style="width: 1922px; height: 300px; left: -2px; top: 2000px; position: absolute; background: #00809D"></div>
-
-   
-
-    
-    
-   
-
-
-
-
 </body>
 </html>
