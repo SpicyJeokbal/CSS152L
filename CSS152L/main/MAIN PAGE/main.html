@@ -348,40 +348,70 @@
 
  
     <!-- ABOUT US -->
-    <div id="about-section" style="width: 1920px; height: 1080px; position: relative; background: #ffffff">
-        <div style="width: 1672px; height: 981px; left: 131px; top: 99px; position: absolute; background: #FFCFCF"></div>
-        <div style="width: 622px; height: 422px; left: 0px; top: 11px; position: absolute; opacity: 0.20" class="about-element delay-1"></div>
-        
-        <div style="width: 366px; height: 287px; left: 579px; top: 214px; position: absolute; text-align: right; color: black; font-size: 64px; font-family: Montserrat; font-weight: 700; line-height: 64px; word-wrap: break-word; text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)" class="about-element right delay-2">
-            THIS IS<br/>WHO<br/>WE<br/>ARE
+    
+<!-- CAROUSEL-STYLE ABOUT US SECTION WITH NEWSPAPER BACKGROUND -->
+<section id="about-us-carousel" style="width: 100%; height: 100vh; background: url('../images/newspaper-bg.jpg') repeat; background-size: cover; background-attachment: fixed; position: relative; overflow: hidden; padding-top: 60px;">
+  <div style="position: absolute; top: 20px; width: 100%; text-align: center;">
+    <h2 style="font-size: 48px; font-family: 'Montserrat', sans-serif; color: #1a1a1a; text-shadow: 1px 1px 3px rgba(255,255,255,0.6);">About Us</h2>
+  </div>
+  <div class="carousel-container" style="width: 100%; height: 100%; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+    <!-- Slide 1 -->
+    <div class="carousel-item about-slide active" style="left: 50%; transform: translateX(-50%); width: 80%; background: rgba(255,255,255,0.88); padding: 40px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+      <div style="display: flex; align-items: center; gap: 40px;">
+        <img src="../images/main page/1485141724_10162314528994547_3645822391865856742_n.jpg" style="width: 400px; height: auto; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);" />
+        <div>
+          <h3 style="font-size: 36px; font-weight: 700; color: #1a1a1a;">THIS IS WHO WE ARE</h3>
+          <p style="font-size: 18px; max-width: 600px; color: #333;">Buffalo’s Wings N’ Things isn’t just a restaurant. We’re the team that brings the heat, the heart, and the hustle — one saucy bite at a time. We opened our Assembly Grounds branch in 2019 with one goal: serve food that fires up your taste buds and brings people together.</p>
         </div>
-        
-        <div style="width: 344px; height: 179px; left: 981px; top: 511px; position: absolute; color: black; font-size: 64px; font-family: Montserrat; font-weight: 700; line-height: 64px; word-wrap: break-word; text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)" class="about-element left delay-3">
-            IT'S MORE<br/>THAN<br/>WINGS
-        </div>
-        
-        <div style="width: 804px; left: 579px; top: 803px; position: absolute; color: black; font-size: 64px; font-family: Montserrat; font-weight: 700; line-height: 64px; word-wrap: break-word; text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25)" class="about-element delay-4">
-            POWERED BY PASSION
-        </div>
-        
-        <div style="width: 575px; height: 348px; left: 981px; top: 197px; position: absolute; color: rgba(0, 0, 0, 0.85); font-size: 28px; font-family: Lora; font-weight: 400; line-height: 28px; word-wrap: break-word" class="about-element left delay-2">
-            <br/>Buffalo's Wings N' Things isn't just a restaurant. We're the team that brings the heat, the heart, and the hustle — one saucy bite at a time. Buffalo's Wings N' Things Assembly Grounds at The Rise opened its doors in 2019 with one goal in mind: to serve food that fires up your taste buds and brings people together.
-        </div>
-        
-        <div style="width: 575px; height: 348px; left: 370px; top: 488px; position: absolute; text-align: right; color: rgba(0, 0, 0, 0.85); font-size: 28px; font-family: Lora; font-weight: 400; line-height: 28px; word-wrap: break-word" class="about-element right delay-3">
-            <br/>We're not just known for our wings we're known for our saucy attitude. From our signature Champion Buffalo wings to hearty rice meals and game-day favorites, everything we serve is made fresh, bold, and packed with flavor. We believe good food should be exciting, satisfying, and something worth coming back for.
-        </div>
-        
-        <div style="width: 890px; height: 348px; left: 536px; top: 858px; position: absolute; text-align: center; color: rgba(0, 0, 0, 0.85); font-size: 28px; font-family: Lora; font-weight: 400; line-height: 28px; word-wrap: break-word" class="about-element delay-5">
-            <br/>Behind the scenes, we're a tight-knit team with a shared love for great food and great service. We take pride in creating a space where regulars feel at home, newcomers feel welcome, and every plate tells our story.
-        </div>
-        
-        <img style="width: 374px; height: 256px; left: 272px; top: 214px; position: absolute" src="../images/main page/1485141724_10162314528994547_3645822391865856742_n.jpg" class="about-element left delay-1" />
-        <img style="width: 359px; height: 253px; left: 1361px; top: 501px; position: absolute" src="../images/main page/117944378_10158540755414547_1326503116057793675_n.jpg" class="about-element right delay-3" />
-        
-        <div style="width: 687.03px; height: 0px; left: 257.99px; top: 498px; position: absolute; outline: 3px black solid; outline-offset: -1.50px" class="about-element delay-2"></div>
-        <div style="width: 739px; height: 0px; left: 981px; top: 772px; position: absolute; outline: 3px black solid; outline-offset: -1.50px" class="about-element delay-4"></div>
+      </div>
     </div>
+
+    <!-- Slide 2 -->
+    <div class="carousel-item about-slide" style="left: 150%; transform: translateX(-50%); width: 80%; background: rgba(255,255,255,0.88); padding: 40px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+      <div style="display: flex; align-items: center; gap: 40px;">
+        <img src="../images/main page/117944378_10158540755414547_1326503116057793675_n.jpg" style="width: 400px; height: auto; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);" />
+        <div>
+          <h3 style="font-size: 36px; font-weight: 700; color: #1a1a1a;">IT’S MORE THAN WINGS</h3>
+          <p style="font-size: 18px; max-width: 600px; color: #333;">From our signature Champion Buffalo wings to hearty rice meals and game-day favorites, everything we serve is bold, made fresh, and packed with flavor. We’re not just known for our wings — we’re known for our attitude.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="carousel-item about-slide" style="left: -50%; transform: translateX(-50%); width: 80%; background: rgba(255,255,255,0.88); padding: 40px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+      <div style="display: flex; align-items: center; gap: 40px;">
+        <img src="../images/main page/485800460_10162319934894547_8630561960821771825_n.jpg" style="width: 400px; height: auto; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);" />
+        <div>
+          <h3 style="font-size: 36px; font-weight: 700; color: #1a1a1a;">POWERED BY PASSION</h3>
+          <p style="font-size: 18px; max-width: 600px; color: #333;">Behind the scenes, we’re a tight-knit team with a shared love for great food and great service. We create a space where regulars feel at home, newcomers feel welcome, and every plate tells our story.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Carousel Navigation Dots -->
+  <div class="carousel-nav about-dots" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 3;">
+    <div class="carousel-dot active"></div>
+    <div class="carousel-dot"></div>
+    <div class="carousel-dot"></div>
+  </div>
+</section>
+
+<!-- NEWSLETTER SECTION -->
+<div id="newsletter" style="background: #F8ECEC; padding: 40px; text-align: center;">
+  <h2 style="font-family: 'Montserrat', sans-serif;">Subscribe to Our Newsletter</h2>
+  <p style="font-family: 'Merriweather', serif;">Be the first to know about new menu items, promos, and more!</p>
+  
+  <form id="newsletter-form" style="margin-top: 20px;">
+    <input type="email" name="email" placeholder="Enter your email" required
+           style="padding: 10px 15px; border: 1px solid #ccc; border-radius: 6px; width: 250px;">
+    <button type="submit"
+            style="padding: 10px 20px; background: #FF6060; color: white; border: none; border-radius: 6px; margin-left: 10px; font-weight: bold; cursor: pointer;">
+      Subscribe
+    </button>
+    <p id="newsletter-message" style="margin-top: 10px; font-family: 'Montserrat', sans-serif;"></p>
+  </form>
+</div>
 
 
     <!--footer-->
@@ -485,5 +515,103 @@
             }, 10);
         });
     </script>
+
+<script>
+  const aboutItems = document.querySelectorAll('#about-us-carousel .about-slide');
+  const aboutDots = document.querySelectorAll('#about-us-carousel .carousel-dot');
+  let aboutIndex = 0;
+  let aboutAnimating = false;
+
+  function updateAboutCarousel() {
+    if (aboutAnimating) return;
+    aboutAnimating = true;
+
+    aboutItems.forEach((item, index) => {
+      item.classList.remove('active');
+      if (index === aboutIndex) {
+        item.style.top = '50%';
+        item.style.left = '50%';
+        item.style.transform = 'translate(-50%, -50%)';
+        setTimeout(() => item.classList.add('active'), 50);
+      } else if (index === (aboutIndex + 1) % aboutItems.length) {
+        item.style.top = '150%';
+        item.style.left = '50%';
+        item.style.transform = 'translate(-50%, -50%)';
+      } else {
+        item.style.top = '-50%';
+        item.style.left = '50%';
+        item.style.transform = 'translate(-50%, -50%)';
+      }
+    });
+
+    aboutDots.forEach((dot, index) => {
+      dot.classList.toggle('active', index === aboutIndex);
+    });
+
+    setTimeout(() => {
+      aboutAnimating = false;
+    }, 800);
+  }
+
+  function nextAboutSlide() {
+    if (aboutAnimating) return;
+    aboutIndex = (aboutIndex + 1) % aboutItems.length;
+    updateAboutCarousel();
+  }
+
+  // Auto-scroll every 5 seconds
+  setInterval(nextAboutSlide, 5000);
+
+  aboutDots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      if (aboutAnimating || aboutIndex === index) return;
+      aboutIndex = index;
+      updateAboutCarousel();
+    });
+  });
+
+  // Set initial positions
+  aboutItems.forEach((item, index) => {
+    item.style.position = 'absolute';
+    item.style.transition = 'all 0.8s ease';
+    item.style.left = '50%';
+    if (index === 0) {
+      item.style.top = '50%';
+      item.style.transform = 'translate(-50%, -50%)';
+    } else {
+      item.style.top = '150%';
+      item.style.transform = 'translate(-50%, -50%)';
+    }
+  });
+
+  updateAboutCarousel();
+</script>
+
 </body>
 </html>
+
+<script>
+  document.getElementById('newsletter-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const messageBox = document.getElementById('newsletter-message');
+
+    try {
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        messageBox.textContent = "✅ Subscribed successfully!";
+        e.target.reset();
+      } else {
+        messageBox.textContent = "❌ " + data.message;
+      }
+    } catch (err) {
+      messageBox.textContent = "❌ Server error. Please try again.";
+    }
+  });
+</script>
