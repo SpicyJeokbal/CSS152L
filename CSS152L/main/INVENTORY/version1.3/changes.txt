@@ -1,9 +1,0 @@
-
-
-
-
-Changes:
-    html13
-        Added an edit function
-    html133
-        Added a sidebar
