@@ -397,26 +397,39 @@
   </div>
 </section>
 
-<!-- NEWSLETTER SECTION -->
-<div id="newsletter" style="background: #F8ECEC; padding: 40px; text-align: center;">
-  <h2 style="font-family: 'Montserrat', sans-serif;">Subscribe to Our Newsletter</h2>
-  <p style="font-family: 'Merriweather', serif;">Be the first to know about new menu items, promos, and more!</p>
-  
-  <form id="newsletter-form" style="margin-top: 20px;">
-    <input type="email" name="email" placeholder="Enter your email" required
-           style="padding: 10px 15px; border: 1px solid #ccc; border-radius: 6px; width: 250px;">
-    <button type="submit"
-            style="padding: 10px 20px; background: #FF6060; color: white; border: none; border-radius: 6px; margin-left: 10px; font-weight: bold; cursor: pointer;">
-      Subscribe
-    </button>
-    <p id="newsletter-message" style="margin-top: 10px; font-family: 'Montserrat', sans-serif;"></p>
-  </form>
-</div>
+    <!-- FOOTER -->
+<footer style="background-color: #00809D; color: white; padding: 40px 20px;">
+  <div style="max-width: 1200px; margin: auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;">
 
+    <!-- Logo -->
+    <div style="flex: 1; min-width: 150px; text-align: center;">
+      <img src="../images/logo.png" alt="B Logo" style="height: 80px;">
+    </div>
 
-    <!--footer-->
-    <div style="width: 100%; height: 300px; position: relative; background: #00809D; margin-top: 40px;"></div>
+    <!-- Socials / Contact Info -->
+    <div style="flex: 1; min-width: 250px; text-align: center;">
+      <h4 style="font-family: 'Montserrat', sans-serif; font-weight: 700;">GET IN TOUCH</h4>
+      <p style="margin: 10px 0;"><img src="../images/icons/email-icon.png" alt="email" style="height: 16px; vertical-align: middle; margin-right: 5px;"> johndoe@gmail.com</p>
+      <p><img src="../images/icons/phone-icon.png" alt="phone" style="height: 16px; vertical-align: middle; margin-right: 5px;"> 0912345678912</p>
+    </div>
 
+    <!-- Newsletter Signup -->
+    <div style="flex: 1; min-width: 280px; text-align: center;">
+      <h4 style="font-family: 'Montserrat', sans-serif; font-weight: 700;">NEWSLETTER SIGN-UP</h4>
+      <p style="font-size: 14px;">Subscribe to our newsletter to receive our offers</p>
+      <form id="footer-newsletter-form" style="margin-top: 10px; display: flex; justify-content: center;">
+        <input type="email" name="email" placeholder="Your email address" required
+               style="padding: 10px; border-radius: 9999px 0 0 9999px; border: none; outline: none; width: 200px;">
+        <button type="submit"
+                style="padding: 10px 20px; background: #FF6060; color: white; border: none; border-radius: 0 9999px 9999px 0; font-weight: 600; cursor: pointer;">
+          Subscribe
+        </button>
+      </form>
+      <p id="footer-newsletter-msg" style="margin-top: 10px; font-size: 13px;"></p>
+    </div>
+
+  </div>
+</footer>
     <!-- CAROUSEL SCRIPT -->
     <script>
         const carousel = document.querySelector('.carousel-container');
