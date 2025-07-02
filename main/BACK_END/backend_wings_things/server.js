@@ -10,7 +10,6 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // --- STATIC FILES (must be before routes!) ---
-//const staticPath = path.join(__dirname, '../../../');
 const staticPath = path.join(__dirname, '../../../');
 console.log('Serving static files from:', staticPath);
 app.use(express.static(staticPath));
@@ -318,6 +317,34 @@ app.delete('/api/inventory/:id', async (req, res) => {
   }
 });
 
+// --- Newsletter Subscription Route ---
+
+// Subscribe user to newsletter
+app.post('/api/subscribe', async (req, res) => {
+  const { email } = req.body;
+  console.log('Subscription attempt:', { email });
+
+  if (!email || !email.includes('@')) {
+    return res.status(400).json({ error: 'Invalid email' });
+  }
+
+  try {
+    // Check if email is already in the subscribers table
+    const result = await pool.query('SELECT * FROM subscribers WHERE email = $1', [email]);
+
+    if (result.rows.length > 0) {
+      return res.status(400).json({ error: 'Email already subscribed' });
+    }
+
+    // Insert email into the subscribers table
+    await pool.query('INSERT INTO subscribers (email) VALUES ($1)', [email]);
+    res.status(201).json({ message: 'Successfully subscribed to the newsletter!' });
+  } catch (err) {
+    console.error('Error subscribing:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // --- Root Route ---
 app.get('/', (req, res) => {
   res.send('Backend server is running!');
@@ -336,5 +363,6 @@ app.listen(PORT, () => {
   console.log('- POST /api/inventory');
   console.log('- PUT /api/inventory/:id');
   console.log('- DELETE /api/inventory/:id');
+  console.log('- POST /api/subscribe');
   console.log('- GET /test');
 });
