@@ -26,7 +26,8 @@ app.use(cors({
     'http://127.0.0.1:3001',  
     'http://localhost:3001',
     'http://localhost:3000',
-    'http://localhost:5505'
+    'http://localhost:5505',
+    'https://css152l.onrender.com'
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type']
