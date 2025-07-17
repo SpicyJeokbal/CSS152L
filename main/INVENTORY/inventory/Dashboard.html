@@ -118,10 +118,11 @@
         <div style="width: 772px; height: 1000px; left: 10px; position: absolute; background: rgb(255, 255, 255)"></div>
         <div style="width: 772px; height: 0px; left: 10px; top: 178px; position: absolute; outline: 3px #F9EDED solid; outline-offset: -1.50px"></div>
       
-        <div style="width: 835px; height: 560px; left: 800px; top: 23px; position: absolute; background: white"></div>
-        <div style="width: 782px; height: 480px; left: 830px; top: 62px; position: absolute; background: #FFF6F6"></div>
+        <div style="width: 835px; height: 500px; left: 800px; top: 0px; position: absolute; background: white"></div>
+        <div style="width: 800px; height: 480px; left: 820px; top: 10px; position: absolute; background: #FFF6F6"></div>
 
-        <div style="width: 835px; height: 407px; left: 800px; top: 651px; position: absolute; background: white"></div>
+        <!-- out of stock or low quantity -->
+        <div style="width: 835px; height: 407px; left: 800px; top: 520px; position: absolute; background: white"></div>
         <!-- Search Bar-->
         <div style="position: absolute; left: 110px; top: 60px; width: 540px; height: 40px; background: #F4DEDE; border-radius: 30px; display: flex; align-items: center; padding: 0 18px; z-index: 2;">
           <input id="dashboard-search" type="text" placeholder="Search..." style="width: 100%; border: none; background: transparent; outline: none; font-size: 16px; color: #333;" />
@@ -131,11 +132,34 @@
         <div style="left: 320px; top: 142px; position: absolute; color: #B5B9BF; font-size: 16px; font-family: Roboto; font-weight: 500; word-wrap: break-word">QUANTITY</div>
         <div style="left: 600px; top: 144px; position: absolute; color: #B5B9BF; font-size: 16px; font-family: Roboto; font-weight: 500; word-wrap: break-word">PRICE</div>
         
-        <div style="width: 294px; height: 51px; left: 900px; top: 296px; position: absolute; color: black; font-size: 36px; font-family: Roboto; font-weight: 600; word-wrap: break-word">BAR  CHART OF THE ITEMS</div>
-        <div style="width: 405px; height: 51px; left: 1106px; top: 671px; position: absolute; color: black; font-size: 20px; font-family: Roboto; font-weight: 600; word-wrap: break-word">Latest Items</div>
-        <div style="width: 782px; height: 324px; left: 1106px; top: 706px; position: absolute; background: #FFF6F6"></div>
-
-        <!-- Inventory Table -->
+        <!-- bar chart of the total items by date and total items by category. The user can toggle between the two charts. -->
+        <div style="width: 400px; height: 51px; left: 1100px; top: 20px; position: absolute; color: black; font-size: 22px; font-family: Roboto; font-weight: 600; word-wrap: break-word">BAR CHART OF THE ITEMS</div>
+        <div id="chart-toggle-container" style="position: absolute; left: 840px; top: 70px; width: 400px; display: flex; gap: 10px;">
+          <button id="toggle-date" style="flex:1; padding: 8px; border-radius: 8px; border: 1px solid #ccc; background: #fff; cursor: pointer; font-weight: 600;">By Date</button>
+          <button id="toggle-category" style="flex:1; padding: 8px; border-radius: 8px; border: 1px solid #ccc; background: #fff; cursor: pointer; font-weight: 600;">By Category</button>
+        </div>
+        <div style="position: absolute; left: 840px; top: 110px; width: 800px; height: 350px; background: #FFF6F6; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+          <canvas id="inventory-bar-chart" style="width:100%;height:100%;"></canvas>
+        </div>
+        <!-- out of stock or low quantity -->
+        <div style="width: 405px; height: 51px; left: 1150px; top: 550px; position: absolute; color: black; font-size: 20px; font-family: Roboto; font-weight: 600; word-wrap: break-word; z-index: 2;">Running Low</div>
+        <div style="width: 800px; height: 340px; left: 820px; top: 530px; position: absolute; background: #FFF6F6; z-index: 1;"></div>
+        <!-- Running Low Table -->
+        <div id="low-inventory-table-container" style="position: absolute; left: 850px; top: 600px; width: 700px; height: 250px; overflow-y: auto; z-index: 3; padding-right: 24px;">
+          <table style="width: 100%; border-collapse: separate; border-spacing: 0 10px; margin: 0 auto;">
+            <thead>
+              <tr>
+                <th style='text-align:left; padding-left:32px; color:#B5B9BF; font-size:16px; font-family:Roboto; font-weight:500;'>NAME</th>
+                <th style='text-align:center; color:#B5B9BF; font-size:16px; font-family:Roboto; font-weight:500;'>QUANTITY</th>
+                <th style='text-align:right; color:#B5B9BF; font-size:16px; font-family:Roboto; font-weight:500;'>PRICE</th>
+              </tr>
+            </thead>
+            <tbody id="low-inventory-body">
+              <!-- Low items will be inserted here -->
+            </tbody>
+          </table>
+        </div>
+        <!-- Inventory Table --> 
         <div id="inventory-table-container" style="position: absolute; left: 60px; top: 180px; width: 650px; bottom: 40px; overflow-y: auto; padding-right: 16px;">
           <table style="width: 100%; border-collapse: separate; border-spacing: 0 10px; margin: 0 auto;">
             <tbody id="dashboard-inventory-body">
@@ -143,14 +167,19 @@
             </tbody>
           </table>
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
         let dashboardItems = [];
+        let chartInstance = null;
+        let currentChartType = 'date';
         async function loadDashboardInventory() {
           try {
             const response = await fetch('http://localhost:3000/api/inventory');
             if (!response.ok) throw new Error('Failed to fetch inventory');
             dashboardItems = await response.json();
             renderDashboardInventory(dashboardItems);
+            renderLowInventory(dashboardItems);
+            renderBarChart('date');
           } catch (err) {
             console.error('Error loading dashboard inventory:', err);
           }
@@ -170,6 +199,70 @@
             tbody.appendChild(tr);
           });
         }
+        function renderLowInventory(items) {
+          const tbody = document.getElementById('low-inventory-body');
+          tbody.innerHTML = '';
+          // Filter and sort items with quantity < 20
+          const lowItems = items.filter(item => item.quantity <= 20).sort((a, b) => a.name.localeCompare(b.name));
+          lowItems.forEach(item => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td style=\"padding: 8px 0 8px 32px; font-size: 16px; width: 20%; text-align: left;\">${item.name}</td>
+              <td style=\"padding: 8px 0; font-size: 16px; width: 20%; text-align: center; font-weight: bold;\">${item.quantity}</td>
+              <td style=\"padding: 8px 0 8px 0; font-size: 16px; width: 20%; text-align: right;\">${item.price}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }
+        function renderBarChart(type) {
+          const ctx = document.getElementById('inventory-bar-chart').getContext('2d');
+          let labels = [];
+          let data = [];
+          if (type === 'date') {
+            // Group by date_added
+            const dateMap = {};
+            dashboardItems.forEach(item => {
+              const date = new Date(item.date_added).toLocaleDateString();
+              dateMap[date] = (dateMap[date] || 0) + 1;
+            });
+            labels = Object.keys(dateMap);
+            data = Object.values(dateMap);
+          } else if (type === 'category') {
+            // Group by category
+            const catMap = {};
+            dashboardItems.forEach(item => {
+              const cat = item.category || 'Uncategorized';
+              catMap[cat] = (catMap[cat] || 0) + 1;
+            });
+            labels = Object.keys(catMap);
+            data = Object.values(catMap);
+          }
+          if (chartInstance) chartInstance.destroy();
+          chartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: type === 'date' ? 'Total Items by Date' : 'Total Items by Category',
+                data: data,
+                backgroundColor: '#FFA500',
+                borderRadius: 6,
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { display: false },
+                title: { display: false }
+              },
+              scales: {
+                x: { grid: { display: false } },
+                y: { beginAtZero: true, grid: { color: '#eee' } }
+              }
+            }
+          });
+        }
         document.addEventListener('DOMContentLoaded', function() {
           const searchInput = document.getElementById('dashboard-search');
           searchInput.addEventListener('input', function() {
@@ -180,6 +273,15 @@
               String(item.price).toLowerCase().includes(term)
             );
             renderDashboardInventory(filtered);
+            renderLowInventory(filtered);
+          });
+          document.getElementById('toggle-date').addEventListener('click', function() {
+            currentChartType = 'date';
+            renderBarChart('date');
+          });
+          document.getElementById('toggle-category').addEventListener('click', function() {
+            currentChartType = 'category';
+            renderBarChart('category');
           });
         });
         loadDashboardInventory();
