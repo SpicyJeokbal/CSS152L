@@ -77,7 +77,7 @@ app.post('/api/register', async (req, res) => {
 });
 
 // Login user
-app.post('/api/login', async (req, res) => {
+app.post('/api/index', async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
