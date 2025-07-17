@@ -121,7 +121,7 @@
         // Hash the password before sending
         password = CryptoJS.SHA256(password).toString();
         // Send login request to backend
-        fetch('http://localhost:3000/api/login', {
+        fetch('https://css152l.onrender.com/api/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
