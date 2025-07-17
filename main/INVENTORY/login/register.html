@@ -117,7 +117,7 @@
         // Hash the password before sending
         password = CryptoJS.SHA256(password).toString();
         // Send registration request to backend
-        fetch('http://localhost:3000/api/register', {
+        fetch('https://css152l.onrender.com/api/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
