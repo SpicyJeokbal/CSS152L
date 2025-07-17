@@ -693,7 +693,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.7.0/jspdf.plugin.autotable.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const BACKEND_URL = 'http://localhost:3000/api/inventory';
+      const BACKEND_URL = 'https://css152l.onrender.com/api/inventory';
       let sortState = {
         name: { direction: 'asc', active: false },
         quantity: { direction: 'asc', active: false },
@@ -813,8 +813,8 @@
       // Load inventory items when page loads
       async function loadInventoryItems() {
         try {
-          //const response = await fetch('https://css152l-2.onrender.com/api/inventory');
-          const response = await fetch('http://localhost:3000/api/inventory');
+          const response = await fetch('https://css152l.onrender.com/api/inventory');
+          /* const response = await fetch('http://localhost:3000/api/inventory'); */
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
@@ -878,7 +878,7 @@
         const category = document.getElementById('itemCategory').value;
        
         try {
-          const response = await fetch('http://localhost:3000/api/inventory', {
+          const response = await fetch('https://css152l.onrender.com/api/inventory', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -913,7 +913,7 @@
         const category = document.getElementById('editItemCategory').value;
        
         try {
-          const response = await fetch(`http://localhost:3000/api/inventory/${id}`, {
+          const response = await fetch(`https://css152l.onrender.com/api/inventory/${id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json'
@@ -954,7 +954,7 @@
           console.log('Deleting item with id:', id);
 
           try {
-            const response = await fetch(`http://localhost:3000/api/inventory/${id}`, {
+            const response = await fetch(`https://css152l.onrender.com/api/inventory/${id}`, {
               method: 'DELETE'
             });
             if (!response.ok) {
@@ -1126,7 +1126,7 @@
 
       async function getLatestEmail() {
         try {
-          const response = await fetch('http://localhost:3000/api/latest-email');
+          const response = await fetch('https://css152l.onrender.com/api/latest-email');
           const data = await response.json();
           return data.email || '';
         } catch (err) {
