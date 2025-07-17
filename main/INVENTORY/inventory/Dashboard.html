@@ -174,7 +174,7 @@
         let currentChartType = 'date';
         async function loadDashboardInventory() {
           try {
-            const response = await fetch('http://localhost:3000/api/inventory');
+            const response = await fetch('https://css152l.onrender.com/api/inventory');
             if (!response.ok) throw new Error('Failed to fetch inventory');
             dashboardItems = await response.json();
             renderDashboardInventory(dashboardItems);
