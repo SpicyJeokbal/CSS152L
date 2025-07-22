@@ -29,6 +29,7 @@ app.use(cors({
     'http://localhost:3001',
     'http://localhost:3000',
     'http://localhost:5505'
+    
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type']
@@ -77,6 +78,7 @@ app.post('/api/register', async (req, res) => {
 });
 
 // Login user
+          /* '/api/index/ */
 app.post('/api/index', async (req, res) => {
   const { email, password } = req.body;
 
@@ -311,12 +313,22 @@ app.post('/api/inventory', async (req, res) => {
 app.put('/api/inventory/:id', async (req, res) => {
   console.log('PUT /api/inventory request received:', req.params.id, req.body); // Debug log
   const { id } = req.params;
-  const { name, quantity, price, category } = req.body;
+  const { name, quantity, price, category, usage } = req.body;
   try {
-    const result = await pool.query(
-      'UPDATE inventory_items SET name = $1, quantity = $2, price = $3, category = $4 WHERE id = $5 RETURNING *',
-      [name, quantity, price, category, id]
-    );
+    let result;
+    if (typeof usage !== 'undefined' && (typeof name === 'undefined' && typeof quantity === 'undefined' && typeof price === 'undefined' && typeof category === 'undefined')) {
+      // Only usage is being updated
+      result = await pool.query(
+        'UPDATE inventory_items SET usage = $1 WHERE id = $2 RETURNING *',
+        [usage, id]
+      );
+    } else {
+      // Update all fields (including usage if present)
+      result = await pool.query(
+        'UPDATE inventory_items SET name = COALESCE($1, name), quantity = COALESCE($2, quantity), price = COALESCE($3, price), category = COALESCE($4, category), usage = COALESCE($5, usage) WHERE id = $6 RETURNING *',
+        [name, quantity, price, category, usage, id]
+      );
+    }
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Item not found' });
     }
