@@ -101,7 +101,8 @@
       </svg>
       DASHBOARD
     </div>
-    <a href="/main/INVENTORY/inventory/index.html" style="text-decoration: none; color: inherit;">
+    <!-- <a href="/main/INVENTORY/inventory/index.html" style="text-decoration: none; color: inherit;"> -->  
+    <a href="main.html" style="text-decoration: none; color: inherit;">
       <div class="menu-item">
         <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
           <path d="M7 4V2C7 1.45 7.45 1 8 1h8c.55 0 1 .45 1 1v2h5v2h-2v13c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V6H2V4h5zM9 3v1h6V3H9zm-1 5v10h8V8H8z"/>
@@ -110,6 +111,7 @@
       </div>
     </a>
     <!-- Logout Button -->
+     <!-- <div class="menu-item logout-btn" onclick="window.location.href='index.html'">Logout</div> -->
     <div class="menu-item logout-btn" onclick="window.location.href='index.html'">Logout</div>
   </div>
   <div class="dashboard-container">
@@ -129,7 +131,9 @@
         </div>
         
         <div style="left: 90px; top: 142px; position: absolute; color: #B5B9BF; font-size: 16px; font-family: Roboto; font-weight: 500; word-wrap: break-word">NAME</div>
-        <div style="left: 320px; top: 142px; position: absolute; color: #B5B9BF; font-size: 16px; font-family: Roboto; font-weight: 500; word-wrap: break-word">QUANTITY</div>
+        <div style="left: 260px; top: 142px; position: absolute; color: #B5B9BF; font-size: 16px; font-family: Roboto; font-weight: 500; word-wrap: break-word">QUANTITY</div>
+        <div style="left: 400px; top: 142px; position: absolute; color: transparent; font-size: 16px; font-family: Roboto; font-weight: 500; word-wrap: break-word">&nbsp;</div>
+        <div style="left: 420px; top: 142px; position: absolute; color: #B5B9BF; font-size: 16px; font-family: Roboto; font-weight: 500; word-wrap: break-word">USAGE</div>
         <div style="left: 600px; top: 144px; position: absolute; color: #B5B9BF; font-size: 16px; font-family: Roboto; font-weight: 500; word-wrap: break-word">PRICE</div>
         
         <!-- bar chart of the total items by date and total items by category. The user can toggle between the two charts. -->
@@ -151,6 +155,7 @@
               <tr>
                 <th style='text-align:left; padding-left:32px; color:#B5B9BF; font-size:16px; font-family:Roboto; font-weight:500;'>NAME</th>
                 <th style='text-align:center; color:#B5B9BF; font-size:16px; font-family:Roboto; font-weight:500;'>QUANTITY</th>
+                <th style='text-align:center; color:#B5B9BF; font-size:16px; font-family:Roboto; font-weight:500;'>USAGE</th>
                 <th style='text-align:right; color:#B5B9BF; font-size:16px; font-family:Roboto; font-weight:500;'>PRICE</th>
               </tr>
             </thead>
@@ -174,6 +179,7 @@
         let currentChartType = 'date';
         async function loadDashboardInventory() {
           try {
+            /* const response = await fetch('https://css152l.onrender.com/api/inventory'); */
             const response = await fetch('https://css152l.onrender.com/api/inventory');
             if (!response.ok) throw new Error('Failed to fetch inventory');
             dashboardItems = await response.json();
@@ -194,6 +200,7 @@
             tr.innerHTML = `
               <td style=\"padding: 8px 0 8px 32px; font-size: 16px; width: 20%; text-align: left;\">${item.name}</td>
               <td style=\"padding: 8px 0; font-size: 16px; width: 20%; text-align: center;\">${item.quantity}</td>
+              <td style=\"padding: 8px 0; font-size: 16px; width: 20%; text-align: center;\">${item.usage ?? ''}</td>
               <td style=\"padding: 8px 0 8px 0; font-size: 16px; width: 20%; text-align: right;\">${item.price}</td>
             `;
             tbody.appendChild(tr);
@@ -209,6 +216,7 @@
             tr.innerHTML = `
               <td style=\"padding: 8px 0 8px 32px; font-size: 16px; width: 20%; text-align: left;\">${item.name}</td>
               <td style=\"padding: 8px 0; font-size: 16px; width: 20%; text-align: center; font-weight: bold;\">${item.quantity}</td>
+              <td style=\"padding: 8px 0; font-size: 16px; width: 20%; text-align: center;\">${item.usage ?? ''}</td>
               <td style=\"padding: 8px 0 8px 0; font-size: 16px; width: 20%; text-align: right;\">${item.price}</td>
             `;
             tbody.appendChild(tr);
