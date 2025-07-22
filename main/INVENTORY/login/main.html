@@ -1317,7 +1317,7 @@
           const doc = new jsPDF();
 
           // Add logo to the top center
-          getBase64ImageFromURL('/main/images/logo.png').then(function(logoDataUrl) {
+          getBase64ImageFromURL('logo.png').then(function(logoDataUrl) {
             // Calculate image width and position for center
             const pageWidth = doc.internal.pageSize.getWidth();
             const imgProps = doc.getImageProperties(logoDataUrl);
