@@ -121,6 +121,7 @@
         // Hash the password before sending
         password = CryptoJS.SHA256(password).toString();
         // Send login request to backend
+        /* fetch('https://css152l.onrender.com/api/index' */
         fetch('https://css152l.onrender.com/api/index', {
           method: 'POST',
           headers: {
@@ -134,6 +135,7 @@
             alert(data.error);
           } else {
             // Login successful, redirect to inventory page
+            /* main.html */
             window.location.href = 'main.html';
           }
         })
