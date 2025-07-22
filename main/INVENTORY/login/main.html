@@ -481,12 +481,36 @@
   .export-dropdown.open #exportArrow {
     transform: rotate(180deg);
   }
+  .usage-btn {
+    background: #eee;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    margin: 0 4px;
+    transition: background 0.2s;
+  }
+  .usage-btn:hover {
+    background: #FF6060;
+    color: #fff;
+  }
+  .usage-value {
+    min-width: 24px;
+    display: inline-block;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+  }
   </style>
 </head>
 <body>
   <div class="sidebar" style="position: relative;">
     <div class="logo">
-      <img src="/main/images/logo.png" alt="Buffalo's Logo" >
+      <img src="logo.png" alt="Buffalo's Logo" >
     </div>
     <a href="Dashboard.html" style="text-decoration: none; color: inherit;">
       <div class="menu-item">
@@ -502,8 +526,8 @@
       </svg>
       INVENTORY
     </div>
-    <!-- Logout Button -->
-    <div class="menu-item logout-btn" onclick="window.location.href='../login/index.html'">Logout</div>
+    <!-- Logout Button -->                                          <!-- ../login/index.html -->
+    <div class="menu-item logout-btn" onclick="window.location.href='index.html'">Logout</div>
   </div>
   <div class="container">
     <div class="header">
@@ -556,6 +580,8 @@
               <div class="export-menu-item" onclick="exportTable('pdf')">Export as PDF</div>
             </div>
           </div>
+          <button class="export-btn" id="importBtn" type="button" style="margin-left: 10px;">Import</button>
+          <input type="file" id="importExcel" accept=".xlsx, .xls" style="display: none;" />
           <button class="add-btn" id="openAddModal">
             <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" style="color: white; margin-right: 5px;">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -572,8 +598,8 @@
             </th>
             <th style="width: 30%; cursor: pointer;" onclick="sortTable(1, 'name')">NAME <span>▼</span></th>
             <th style="width: 25%; cursor: pointer;" onclick="sortTable(2, 'quantity')">QUANTITY <span>▼</span></th>
-            <th style="width: 20%; cursor: pointer;" onclick="sortTable(3, 'price')">PRICE <span>▼</span></th>
-            <th style="width: 20%; cursor: pointer;" onclick="sortTable(4, 'category')">CATEGORY <span>▼</span></th>
+            <th style="width: 15%; cursor: pointer;" onclick="sortTable(3, 'usage')">USAGE <span>▼</span></th>
+            <th style="width: 20%; cursor: pointer;" onclick="sortTable(4, 'price')">PRICE <span>▼</span></th>
             <th style="width: 20%; cursor: pointer;" onclick="sortTable(5, 'date')">DATE <span>▼</span></th>
             <th style="width: 10%;">ACTION</th>
           </tr>
@@ -598,6 +624,10 @@
         <div class="form-group">
           <label for="editItemQuantity">Quantity*</label>
           <input type="number" id="editItemQuantity" required>
+        </div>
+        <div class="form-group">
+          <label for="editItemUsage">Usage*</label>
+          <input type="number" id="editItemUsage" required>
         </div>
         <div class="form-group">
           <label for="editItemPrice">Price*</label>
@@ -693,6 +723,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.7.0/jspdf.plugin.autotable.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+                          /* 'https://css152l.onrender.com/api/inventory' for render, 'http://localhost:3000/api/inventory' for local */
       const BACKEND_URL = 'https://css152l.onrender.com/api/inventory';
       let sortState = {
         name: { direction: 'asc', active: false },
@@ -813,8 +844,8 @@
       // Load inventory items when page loads
       async function loadInventoryItems() {
         try {
+          //const response = await fetch('https://css152l.onrender.com/api/inventory');
           const response = await fetch('https://css152l.onrender.com/api/inventory');
-          /* const response = await fetch('http://localhost:3000/api/inventory'); */
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
@@ -838,6 +869,11 @@
             </td>
             <td>${item.name}</td>
             <td>${item.quantity}</td>
+            <td>
+              <button class="usage-btn usage-minus" title="Decrease Usage">-</button>
+              <span class="usage-value">${item.usage || 0}</span>
+              <button class="usage-btn usage-plus" title="Increase Usage">+</button>
+            </td>
             <td>${item.price}</td>
             <td>${item.category || ''}</td>
             <td>${new Date(item.date_added).toLocaleDateString()}</td>
@@ -849,6 +885,7 @@
         });
         addCheckboxListeners();
         addEditButtonListeners();
+        addUsageButtonListeners();
       }
 
       function addEditButtonListeners() {
@@ -857,6 +894,56 @@
             openEditModal(this);
           });
         });
+      }
+
+      function addUsageButtonListeners() {
+        document.querySelectorAll('.usage-minus').forEach(btn => {
+          btn.addEventListener('click', async function(e) {
+            e.stopPropagation();
+            const row = btn.closest('tr');
+            const editBtn = row.querySelector('.edit-btn');
+            const id = editBtn.dataset.id;
+            const usageSpan = row.querySelector('.usage-value');
+            let usage = parseInt(usageSpan.textContent) || 0;
+            if (usage > 0) {
+              usage--;
+              await updateUsage(id, usage, usageSpan);
+            }
+          });
+        });
+        document.querySelectorAll('.usage-plus').forEach(btn => {
+          btn.addEventListener('click', async function(e) {
+            e.stopPropagation();
+            const row = btn.closest('tr');
+            const editBtn = row.querySelector('.edit-btn');
+            const id = editBtn.dataset.id;
+            const usageSpan = row.querySelector('.usage-value');
+            let usage = parseInt(usageSpan.textContent) || 0;
+            const quantity = parseInt(row.cells[2].textContent) || 0;
+            if (usage < quantity) {
+              usage++;
+              await updateUsage(id, usage, usageSpan);
+            }
+          });
+        });
+      }
+
+      async function updateUsage(id, usage, usageSpan) {
+        try {
+          /* const response = await fetch(`https://css152l.onrender.com/api/inventory/${id} */
+          const response = await fetch(`https://css152l.onrender.com/api/inventory/${id}` , {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ usage })
+          });
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to update usage');
+          }
+          usageSpan.textContent = usage;
+        } catch (error) {
+          alert('Error updating usage: ' + error.message);
+        }
       }
 
       document.getElementById('categoryFilter').addEventListener('change', function() {
@@ -878,6 +965,7 @@
         const category = document.getElementById('itemCategory').value;
        
         try {
+          /* const response = await fetch(`https://css152l.onrender.com/api/inventory' */
           const response = await fetch('https://css152l.onrender.com/api/inventory', {
             method: 'POST',
             headers: {
@@ -909,16 +997,18 @@
         const id = currentEditRow.querySelector('.edit-btn').dataset.id;
         const name = document.getElementById('editItemName').value;
         const quantity = document.getElementById('editItemQuantity').value;
+        const usage = document.getElementById('editItemUsage').value;
         const price = document.getElementById('editItemPrice').value;
         const category = document.getElementById('editItemCategory').value;
        
         try {
+          /* const response = await fetch(`https://css152l.onrender.com/api/inventory/${id}` */
           const response = await fetch(`https://css152l.onrender.com/api/inventory/${id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ name, quantity, price, category })
+            body: JSON.stringify({ name, quantity, usage, price, category })
           });
 
           if (!response.ok) {
@@ -954,6 +1044,7 @@
           console.log('Deleting item with id:', id);
 
           try {
+            /* const response = await fetch(`https://css152l.onrender.com/api/inventory/${id}` */
             const response = await fetch(`https://css152l.onrender.com/api/inventory/${id}`, {
               method: 'DELETE'
             });
@@ -1025,11 +1116,13 @@
         const cells = row.cells;
         const name = cells[1].textContent;
         const quantity = cells[2].textContent;
-        const price = cells[3].textContent;
-        const category = cells[4].textContent;
+        const usage = cells[3].textContent;
+        const price = cells[4].textContent;
+        const category = cells[5].textContent;
        
         document.getElementById('editItemName').value = name;
         document.getElementById('editItemQuantity').value = quantity;
+        document.getElementById('editItemUsage').value = usage;
         document.getElementById('editItemPrice').value = price;
         document.getElementById('editItemCategory').value = category;
        
@@ -1126,6 +1219,7 @@
 
       async function getLatestEmail() {
         try {
+          /* const response = await fetch('https://css152l.onrender.com/api/latest-email') */
           const response = await fetch('https://css152l.onrender.com/api/latest-email');
           const data = await response.json();
           return data.email || '';
@@ -1145,24 +1239,72 @@
           .filter(row => row.style.display !== 'none') // Only visible rows
           .map(row => row.slice ? row.slice(1, -1) : Array.from(row.cells).map(cell => cell.textContent.trim()));
 
-        // For both Excel and PDF, use custom header and row order: DATE, NAME, QUANTITY, PRICE, CATEGORY
-        const exportHeaders = ["DATE", "NAME", "QUANTITY", "PRICE", "CATEGORY"];
+        // For both Excel and PDF, use custom header and row order: DATE, NAME, QUANTITY, USAGE, PRICE, TOTAL, USED, CATEGORY
+        const exportHeaders = ["DATE", "NAME", "QUANTITY", "USAGE", "PRICE", "TOTAL", "USED", "CATEGORY"];
         const exportRows = Array.from(table.querySelectorAll('tbody tr'))
           .filter(row => row.style.display !== 'none')
           .map(row => {
             const cells = Array.from(row.cells);
+            // Format date as MM/DD/YYYY
+            let date = cells[6]?.textContent.trim() || '';
+            if (date) {
+              const d = new Date(date);
+              if (!isNaN(d)) {
+                date = `${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getDate().toString().padStart(2,'0')}/${d.getFullYear()}`;
+              }
+            }
+            const quantity = parseFloat(cells[2]?.textContent.trim() || '0');
+            const usage = parseFloat(cells[3]?.querySelector('.usage-value')?.textContent.trim() || '0');
+            const price = parseFloat(cells[4]?.textContent.trim() || '0');
+            const total = (quantity * price).toFixed(2);
+            const used = (usage * price).toFixed(2);
             return [
-              cells[5]?.textContent.trim() || '', // DATE
+              date, // DATE
               cells[1]?.textContent.trim() || '', // NAME
               cells[2]?.textContent.trim() || '', // QUANTITY
-              cells[3]?.textContent.trim() || '', // PRICE
-              cells[4]?.textContent.trim() || ''  // CATEGORY
+              cells[3]?.querySelector('.usage-value')?.textContent.trim() || '', // USAGE
+              cells[4]?.textContent.trim() || '', // PRICE
+              total, // TOTAL
+              used, // USED
+              cells[5]?.textContent.trim() || ''  // CATEGORY
             ];
           });
+
+        // Calculate column totals for summary row
+        let sumQuantity = 0, sumUsage = 0, sumPrice = 0, sumTotal = 0, sumUsed = 0;
+        exportRows.forEach(row => {
+          sumQuantity += parseFloat(row[2]) || 0;
+          sumUsage += parseFloat(row[3]) || 0;
+          sumPrice += parseFloat(row[4]) || 0;
+          sumTotal += parseFloat(row[5]) || 0;
+          sumUsed += parseFloat(row[6]) || 0;
+        });
+        // Add summary row
+        exportRows.push([
+          '', // DATE
+          '', // NAME
+          sumQuantity.toString(), // QUANTITY
+          sumUsage.toString(),    // USAGE
+          '',                    // PRICE (no sum)
+          sumTotal.toFixed(2),    // TOTAL
+          sumUsed.toFixed(2),     // USED
+          ''  // CATEGORY
+        ]);
 
         if (type === 'excel') {
           // Excel export using SheetJS (no email row)
           const ws = XLSX.utils.aoa_to_sheet([exportHeaders, ...exportRows]);
+          // Set column widths for better readability
+          ws['!cols'] = [
+            { wch: 12 }, // DATE
+            { wch: 18 }, // NAME
+            { wch: 10 }, // QUANTITY
+            { wch: 10 }, // USAGE
+            { wch: 12 }, // PRICE
+            { wch: 14 }, // TOTAL
+            { wch: 14 }, // USED
+            { wch: 16 }  // CATEGORY
+          ];
           const wb = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(wb, ws, "Inventory");
           XLSX.writeFile(wb, "inventory.xlsx");
@@ -1212,6 +1354,13 @@
               startY: startY,
               styles: { fontSize: 10 },
               headStyles: { fillColor: [44, 44, 44] },
+              didParseCell: function (data) {
+                // Highlight and bold the summary row (last row)
+                if (data.row.index === pdfRows.length - 1) {
+                  data.cell.styles.fontStyle = 'bold';
+                  data.cell.styles.fillColor = [255, 255, 204]; // light yellow
+                }
+              },
               didDrawPage: function (data) {
                 // Add pagination and timestamp
                 const pageCount = doc.internal.getNumberOfPages();
@@ -1234,6 +1383,75 @@
       // Show delete modal when delete button is clicked
       deleteBtn.addEventListener('click', function() {
         deleteModal.style.display = 'flex';
+      });
+
+      document.getElementById('importBtn').addEventListener('click', function() {
+        document.getElementById('importExcel').click();
+      });
+
+      document.getElementById('importExcel').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const sheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[sheetName];
+          const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+          // Get headers and map to expected fields
+          const headers = json[0].map(h => h.toString().trim().toLowerCase());
+          const expectedFields = ['name', 'quantity', 'usage', 'price', 'category'];
+          const fieldIndexes = {};
+          expectedFields.forEach(field => {
+            fieldIndexes[field] = headers.indexOf(field);
+          });
+
+          // Parse rows
+          const items = [];
+          for (let i = 1; i < json.length; i++) {
+            const row = json[i];
+            if (!row || row.length === 0) continue;
+            const item = {};
+            expectedFields.forEach(field => {
+              item[field] = row[fieldIndexes[field]] || '';
+            });
+            // Only add if name and quantity are present
+            if (item.name && item.quantity) items.push(item);
+          }
+
+          // Get current inventory names (case-insensitive)
+          const currentNames = new Set(allItems.map(i => i.name.trim().toLowerCase()));
+          // Filter out duplicates
+          const uniqueItems = items.filter(item => !currentNames.has(item.name.trim().toLowerCase()));
+          const duplicateCount = items.length - uniqueItems.length;
+
+          // Now you can send 'uniqueItems' to your backend via fetch or display in your UI
+          // Example: send each item to backend
+          let importedCount = 0;
+          uniqueItems.forEach(item => {
+            /* 'https://css152l.onrender.com/api/inventory' */
+            fetch('https://css152l.onrender.com/api/inventory', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(item)
+            })
+            .then(res => res.json())
+            .then(data => {
+              importedCount++;
+              if (importedCount === uniqueItems.length) {
+                let msg = 'Import complete! ' + uniqueItems.length + ' items imported.';
+                if (duplicateCount > 0) msg += ' ' + duplicateCount + ' duplicate(s) skipped.';
+                alert(msg);
+                loadInventoryItems();
+              }
+            })
+            .catch(err => console.error('Import error:', err));
+          });
+        };
+        reader.readAsArrayBuffer(file);
       });
     });
   </script>
