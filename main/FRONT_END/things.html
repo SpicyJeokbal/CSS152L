@@ -26,6 +26,57 @@
       letter-spacing: 0.02em;
     }
 
+    /* Header Styles */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background-color: white;
+      z-index: 100;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header a {
+      text-decoration: none;
+    }
+
+    .header nav {
+      position: absolute;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .header nav a {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 500;
+      font-size: 18px;
+      color: #1E1E1E;
+      text-decoration: none;
+    }
+
+    .header .logo {
+      width: 40px;
+      height: 40px;
+      position: absolute;
+      top: 22px;
+      left: 41px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
     /* 🛒 Top Cart Button */
     #topCartButton {
       position: fixed;
@@ -73,7 +124,7 @@
     .wings-item:hover {
       transform: translateY(-8px) scale(1.025);
       box-shadow: 0 8px 32px rgba(156, 9, 9, 0.13);
-      z-index: 2;
+      z-index: 200;
     }
 
     .wings-item img {
@@ -536,12 +587,10 @@
     /* Hide cart icon when cart sidebar is open */
     #cartIconWrapper.cart-hidden {
       display: none !important;
-      
     }
   </style>
 </head>
 <body>
-    
   
   <!-- Cart Sidebar -->
   <div id="cartSidebar" class="cart-sidebar">
@@ -595,28 +644,19 @@
       <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
         <div class="modal-left">
-          <img id="modalImage" src="" alt="Product Image" src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c044bc57-0319-4266-a272-4daa1e56a629.png">
+          <img id="modalImage" src="" alt="Product Image">
         </div>
         <div class="modal-right">
           <div class="modal-name" id="modalImageName"></div>
           <p id="modalDescription"></p>
           <div id="modalPrice"></div>
           <div class="modal-section">
-            <strong>Choose Quantity:</strong><br>
-            <div class="quantity-options">
-              <button onclick="selectQuantity(4)">4 pcs</button>
-              <button onclick="selectQuantity(8)">8 pcs</button>
-              <button onclick="selectQuantity(12)">12 pcs</button>
-            </div>
+          <strong>Choose Option:</strong><br>
+          <div class="quantity-options">
+          <!-- buttons will be populated by JavaScript -->
           </div>
-          <div class="modal-section">
-            <strong>Type:</strong><br>
-            <div class="type-options">
-              <button onclick="selectType('Wings')">Wings</button>
-              <button onclick="selectType('Boneless Chicken')">Boneless Chicken</button>
-              <button onclick="selectType('Chicken Fingers')">Chicken Fingers</button>
-            </div>
           </div>
+          
           <div class="modal-section" style="margin-bottom: 12px;">
             <strong style="font-size: 13px;">Note (optional):</strong><br>
             <textarea id="itemNote" placeholder="e.g., Remove onions" rows="2" style="width: 90%; min-height: 36px; max-height: 60px; resize: none; padding: 7px 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 14px; margin-top: 4px; box-sizing: border-box;"></textarea>
@@ -632,10 +672,8 @@
     </div>
   </div>
 
-
-  
-   <!-- FOOTER -->
-   <footer style="background-color: #00809D; color: white; padding: 40px 20px;">
+  <!-- FOOTER -->
+  <footer style="background-color: #00809D; color: white; padding: 40px 20px;">
     <div style="max-width: 1200px; margin: auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;">
         
         <!-- Logo -->
@@ -693,53 +731,149 @@
             <p id="footer-newsletter-msg" style="margin-top: 10px; font-size: 13px;"></p>
         </div>
     </div>
-</footer>
-
-
-
-
+  </footer>
 
   <script>
     const wingsData = [
-      { name: "The Rookie", image: "THE_ROOKIE.jpg", description: "A classic flavor that started it all." },
-      { name: "Sriracha Garlic", image: "SRIRACHA_GARLIC.jpg", description: "Spicy, garlicky, and full of punch." },
-      { name: "Roasted Sesame", image: "ROASTED_SESAME.jpg", description: "A nutty, toasty flavor with sesame crunch." },
-      { name: "New York's Finest", image: "NEW_YORK'S_FINEST.jpg", description: "A bold mix inspired by the Big Apple." },
-      { name: "K-POP", image: "K-POP.jpg", description: "Sweet and spicy Korean-style favorite." },
-      { name: "Honey BBQ", image: "HONEY_BBQ.jpg", description: "Smoky barbecue with a sweet honey twist." },
-      { name: "Garlic Parmesan", image: "GARLIC_PARMESAN.jpg", description: "Savory garlic with rich parmesan cheese." },
-      { name: "Creamy Salted Egg", image: "CREAMY_SALTED_EGG.jpg", description: "Rich, creamy, and umami-packed." },
-      { name: "Chipotle Lime", image: "CHIPOTLE_LIME.jpg", description: "Zesty lime with smoky chipotle heat." },
-      { name: "Basil N' Garlic", image: "BASIL_N'_GARLIC.jpg", description: "Fresh basil with savory garlic."}, 
-      { name: "Steamed White Rice", image: "STEAMED_WHITE_RICE.jpg", description: "Fluffy, perfectly cooked white rice — a timeless side that complements any meal." },
-      { name: "Dirty Rice", image: "DIRTY_RICE.jpg", description: "A bold and savory rice dish cooked with seasoned ground meat, spices, and aromatics. Don’t let the name fool you — it’s packed with flavor, not mess." }
+      { 
+        name: "Nachos", 
+        image: "THE_ROOKIE.jpg", 
+        description: "Crunchy, fully loaded nacho plates perfect for sharing—or not. Topped with bold flavors like chili, cheese, or pulled pork for that extra kick.",
+        options: [
+          { name: "Chili & Cheese Nachos", price: 229 },
+          { name: "Pulled Pork Nachos", price: 279 }
+        ]
+      },
+      { 
+        name: "Wafflecut Fries", 
+        image: "SRIRACHA_GARLIC.jpg", 
+        description: "Crispy, golden waffle fries served in baskets or smothered in savory toppings. Great as a side, even better as the main event.",
+        options: [
+          { name: "Basket of Fries", price: 199 },
+          { name: "Bacon & Cheese Fries", price: 299 }
+        ]
+      },
+      { 
+        name: "Thick Cut Fries", 
+        image: "ROASTED_SESAME.jpg", 
+        description: "Hearty and satisfying thick-cut fries, served classic or dressed up with creamy cheese or chili toppings.",
+        options: [
+          { name: "Basket of Fries", price: 149 },
+          { name: "Cheesy Fries", price: 189 },
+          { name: "Chili & Cheese Fries", price: 229 }
+        ]
+      },
+      { 
+        name: "Pasta", 
+        image: "NEW_YORK'S_FINEST.jpg", 
+        description: "Comfort food done right—creamy, cheesy, or spiced just right. Our pasta dishes bring bold southern flavors to your plate.",
+        options: [
+          { name: "Creamy Mushroom & Bacon Pasta", price: 249 },
+          { name: "Cajun Chicken Pasta", price: 249 },
+          { name: "Texas Mac & Cheese", price: 249 }
+        ]
+      },
+      { 
+        name: "Quesadillas", 
+        image: "K-POP.jpg", 
+        description: "Grilled golden tortillas packed with gooey cheese and mouthwatering fillings. Perfectly toasted and made for dipping.",
+        options: [
+          { name: "Chicken Quesadilla", price: 329 },
+          { name: "Pulled Pork Quesadilla", price: 329 }
+        ]
+      },
+      { 
+        name: "Burritos", 
+        image: "HONEY_BBQ.jpg", 
+        description: "Big, bold, and bursting with flavor. Our burritos are wrapped tight with hearty meats, rice, and savory sauces.",
+        options: [
+          { name: "Chicken Burrito", price: 299 },
+          { name: "Pulled Pork Burrito", price: 299 }
+        ]
+      },
+      { 
+        name: "Southern Fried Chicken Sandwich", 
+        image: "GARLIC_PARMESAN.jpg", 
+        description: "Crispy, juicy chicken in a soft bun—done two ways. Choose the classic or the Liberty with your favorite flavor twist.",
+        options: [
+          { name: "Classic", price: 169, withFries: 199, hasFries: true },
+          { name: "Liberty", price: 169, withFries: 199, hasFries: true }
+        ]
+      },
+      { 
+        name: "Cheeseburgers", 
+        image: "CREAMY_SALTED_EGG.jpg", 
+        description: "American-style cheeseburgers, made juicy and stacked. Choose from classic or NY-style with optional fries and an extra patty if you're hungry for more.",
+        options: [
+          { name: "Classic", price: 219, withFries: 289 },
+          { name: "NY Style Cheeseburger", price: 259, withFries: 329 }
+        ]
+      },
+      { 
+        name: "Drinks", 
+        image: "CHIPOTLE_LIME.jpg", 
+        description: "Cool down with refreshing iced tea in 16 oz, 22 oz, or by the pitcher—perfect for solo sips or group gulps.",
+        options: [
+          { name: "16 oz Iced Tea", price: 69 },
+          { name: "22 oz Iced Tea", price: 89 },
+          { name: "Pitcher", price: 199 }
+        ]
+      },
+      { 
+        name: "Dessert", 
+        image: "BASIL_N'_GARLIC.jpg", 
+        description: "Finish strong with our rich and creamy New York Cheesecake Ice Cream—a sweet ending to any meal.",
+        options: [
+          { name: "New York Cheese Cake Ice Cream", price: 129 }
+        ]
+      }, 
+      { 
+        name: "Steamed White Rice", 
+        image: "STEAMED_WHITE_RICE.jpg", 
+        description: "Fluffy, perfectly cooked white rice — a timeless side that complements any meal.",
+        options: [
+          { name: "Single Serving", price: 44 },
+          { name: "Double Serving", price: 88 },
+          { name: "Platter", price: 114 }
+        ]
+      },
+      { 
+        name: "Dirty Rice", 
+        image: "DIRTY_RICE.jpg", 
+        description: "A bold and savory rice dish cooked with seasoned ground meat, spices, and aromatics. Don't let the name fool you — it's packed with flavor, not mess.",
+        options: [
+          { name: "Single Serving", price: 59 },
+          { name: "Double Serving", price: 118 },
+          { name: "Platter", price: 149 }
+        ]
+      }
     ];
 
     function getPrice(name, quantity) {
-  const ricePrices = {
-    "Steamed White Rice": { 1: 44, 2: 88, platter: 114 },
-    "Dirty Rice": { 1: 59, 2: 118, platter: 149 }
-  };
+      const ricePrices = {
+        "Steamed White Rice": { 1: 44, 2: 88, platter: 114 },
+        "Dirty Rice": { 1: 59, 2: 118, platter: 149 }
+      };
 
-  const defaultPrices = {4: 229, 8: 454, 12: 678, '1': 44, '2': 88,'Platter': 114};
+      const defaultPrices = {4: 229, 8: 454, 12: 678, '1': 44, '2': 88,'Platter': 114};
 
-  const cleanName = name.trim().toLowerCase();
-  if (cleanName in ricePrices) {
-  if (quantity === 1) return ricePrices[cleanName][1];
-  if (quantity === 2) return ricePrices[cleanName][2];
-  return ricePrices[cleanName]["platter"];
-  }
+      const cleanName = name.trim().toLowerCase();
+      if (cleanName in ricePrices) {
+        if (quantity === 1) return ricePrices[cleanName][1];
+        if (quantity === 2) return ricePrices[cleanName][2];
+        return ricePrices[cleanName]["platter"];
+      }
 
+      return defaultPrices[quantity] || defaultPrices[4];
+    }
 
-  return defaultPrices[quantity] || defaultPrices[4];
-}
-
-    
     // Initialize cart from localStorage if available
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     let selectedQuantity = 4;
     let selectedType = "Wings";
+    let selectedPrice = 0;
+    let selectedWithFries = 0;
 
     const wingsGrid = document.getElementById('wingsGrid');
 
@@ -750,7 +884,7 @@
         <img src="/main/images/wings/${wings.image}" alt="${wings.name}">
         <div class="info">
           <div>${wings.name}</div>
-          <div class="price">₱229.00</div>
+          <div class="price">₱${Math.min(...wings.options.map(opt => opt.price))}.00</div>
         </div>
       `;
       item.onclick = () => openModal(wings);
@@ -758,46 +892,50 @@
     });
 
     function openModal(wings) {
-   document.getElementById('modalImage').src = '/main/images/wings/' + wings.image;
-    document.getElementById('modalImageName').innerText = wings.name;
-   document.getElementById('modalDescription').innerText = wings.description;
-   document.getElementById('itemCount').value = 1;
-    document.getElementById('itemNote').value = '';
+  console.log("Opening modal for:", wings); // Add this line for debugging
 
-   const quantityContainer = document.querySelector('.quantity-options');
-   const typeContainer = document.querySelector('.type-options');
-   const typeSection = typeContainer.closest('.modal-section');
+  // Store current wings data globally
+  window.currentWings = wings;
 
-   if (["Steamed White Rice", "Dirty Rice"].includes(wings.name)) {
-    // Rice items — custom quantity, no type
-    quantityContainer.innerHTML = `
-      <button onclick="selectQuantity('1')">1</button>
-      <button onclick="selectQuantity('2')">2</button>
-      <button onclick="selectQuantity('Platter')">Platter</button>
-    `;
-    typeSection.style.display = 'none';
-    selectedQuantity = '1';
-   } else {
-    // Default for wings and others
-    quantityContainer.innerHTML = `
-      <button onclick="selectQuantity(4)">4 pcs</button>
-      <button onclick="selectQuantity(8)">8 pcs</button>
-      <button onclick="selectQuantity(12)">12 pcs</button>
-    `;
-    typeSection.style.display = 'block';
-    typeContainer.innerHTML = `
-      <button onclick="selectType('Wings')">Wings</button>
-      <button onclick="selectType('Boneless')">Boneless</button>
-      <button onclick="selectType('Chicken Fingers')">Chicken Fingers</button>
-    `;
-    selectedQuantity = 4;
-  }
+  // Reset to first option
+  const firstOption = wings.options[0];
+  selectedQuantity = firstOption.name;
+  selectedPrice = firstOption.price;
+  selectedWithFries = firstOption.withFries || 0;
 
-  selectedType = "Wings";
+  // Ensure the modal elements are correctly referenced
+  const modalImage = document.getElementById('modalImage');
+  const modalImageName = document.getElementById('modalImageName');
+  const modalDescription = document.getElementById('modalDescription');
+  const itemCount = document.getElementById('itemCount');
+  const itemNote = document.getElementById('itemNote');
+  const quantityContainer = document.querySelector('.quantity-options');
+
+  modalImage.src = '/main/images/wings/' + wings.image;
+  modalImageName.innerText = wings.name;
+  modalDescription.innerText = wings.description;
+  itemCount.value = 1; // Reset item count
+  itemNote.value = ''; // Reset note
+
+  // Populate quantity options
+  quantityContainer.innerHTML = wings.options.map((option, index) => 
+    `<button class="option-button" onclick="selectOption('${option.name}', ${option.price}, ${option.withFries || 0})" ${index === 0 ? 'class="active"' : ''}>${option.name}</button>`
+  ).join('');
+
+  // Add button for fries if applicable
+  const friesButton = wings.options[0].hasFries ? 
+    `<button class="add-fries-btn" onclick="addFries()">Add Fries for ₱${wings.options[0].withFries}</button>` : '';
+  // Append fries button to modal
+  document.querySelector('.modal-right').innerHTML += friesButton;
+
+  // Set initial price
   updatePrice();
-  updateButtons();
+
+  // Show the modal
   document.getElementById('itemModal').style.display = 'flex';
 }
+
+
 
 
     function closeModal() {
@@ -815,6 +953,28 @@
       updateButtons();
     }
 
+    function selectOption(name, price, withFries = 0) {
+  console.log(`Selected option: ${name}, Price: ${price}, With Fries: ${withFries}`); // Add this line for debugging
+
+  selectedQuantity = name;
+  selectedPrice = price;
+  selectedWithFries = withFries;
+  updatePrice();
+
+  // Update button active states
+  const buttons = document.querySelectorAll('.quantity-options .option-button');
+  buttons.forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.textContent === name) {
+      btn.classList.add('active');
+    }
+  });
+}
+
+
+
+
+
     function adjustCount(change) {
       const input = document.getElementById('itemCount');
       let current = parseInt(input.value) || 1;
@@ -829,9 +989,12 @@
     }
 
     function updatePrice() {
-      const name = document.getElementById('modalImageName').innerText;
-        document.getElementById('modalPrice').innerText = `₱${getPrice(name, selectedQuantity)}`;
+      document.getElementById('modalPrice').innerText = `₱${selectedPrice}`;
 
+      // Show additional pricing info for items with fries option
+      if (selectedWithFries > 0) {
+        document.getElementById('modalPrice').innerHTML = `₱${selectedPrice} <br><small style="font-size: 14px; color: #666;">With Thick Cut Fries: ₱${selectedWithFries}</small>`;
+      }
     }
 
     function updateButtons() {
@@ -847,11 +1010,20 @@
       const count = parseInt(document.getElementById('itemCount').value) || 1;
       const name = document.getElementById('modalImageName').innerText;
       const image = document.getElementById('modalImage').src;
-      const price = getPrice(name, selectedQuantity);
+      const price = selectedPrice;
       const subtotal = price * count;
       const note = document.getElementById('itemNote').value;
 
-      const item = { name, image, type: selectedType, quantity: selectedQuantity, count, price, subtotal, note };
+      const item = { 
+        name, 
+        image, 
+        type: selectedQuantity, // This now holds the option name
+        quantity: selectedQuantity, 
+        count, 
+        price, 
+        subtotal,   
+        note 
+      };
       cart.push(item);
 
       // Persist to localStorage
@@ -918,7 +1090,7 @@
       sidebar.classList.add("open");
       setTimeout(() => { cartIcon.classList.add("cart-hidden"); }, 10);
     }
-
+    
     function checkoutCart() {
       if (cart.length === 0) {
         alert("Your cart is empty.");
@@ -947,7 +1119,5 @@
     });
   </script>
 
-  
 </body>
 </html>
-
