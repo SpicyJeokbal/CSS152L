@@ -53,7 +53,7 @@
     <div style="left: 773px; top: 557px; position: absolute; opacity: 0.70; text-align: center; color: black; font-size: 16px; font-weight: 400; line-height: 16px; word-wrap: break-word">Password</div>
     
     <!-- Logo -->
-    <img style="width: 192px; height: 192px; left: 858px; top: 184px; position: absolute; object-fit: contain;" src="/main/images/logo.png" alt="Logo" />
+    <img style="width: 192px; height: 192px; left: 858px; top: 184px; position: absolute; object-fit: contain;" src="logo.png" alt="Logo" />
     
     <!-- Email input -->
     <div style="width: 374px; height: 0px; left: 773px; top: 496px; position: absolute; outline: 1px black solid; outline-offset: -0.50px;"></div>
@@ -81,7 +81,7 @@
     <div class="login-btn" style="width: 210px; height: 40px; left: 855px; top: 708px; position: absolute; background: #FF6060; border-radius: 15px; display: flex; justify-content: center; align-items: center;" onclick="handleLogin()">
         <div style="text-align: center; color: white; font-size: 25px; font-weight: 700; line-height: 32px; word-wrap: break-word">CREATE</div>
     </div>
-    <a href="login.html" style="left: 900px; top: 760px; position: absolute; opacity: 0.70; text-align: center; color: #0F34CA; font-size: 16px; font-weight: 400; line-height: 16px; cursor: pointer; text-decoration: none;">Back to Login</a>
+    <a href="index.html" style="left: 900px; top: 760px; position: absolute; opacity: 0.70; text-align: center; color: #0F34CA; font-size: 16px; font-weight: 400; line-height: 16px; cursor: pointer; text-decoration: none;">Back to Login</a>
   </div>    
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
@@ -117,7 +117,8 @@
         // Hash the password before sending
         password = CryptoJS.SHA256(password).toString();
         // Send registration request to backend
-        fetch('http://localhost:3000/api/register', {
+        /* fetch('https://css152l.onrender.com/api/register', { */
+        fetch('https://css152l.onrender.com/api/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -130,7 +131,8 @@
             alert(data.error);
           } else {
             alert('Registration successful! Please login.');
-            window.location.href = 'login.html';
+            /* index.html for render, login.html for local */
+            window.location.href = 'index.html';
           }
         })
         .catch(error => {

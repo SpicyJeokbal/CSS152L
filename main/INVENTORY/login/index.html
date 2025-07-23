@@ -47,13 +47,18 @@
 </head>
 <body>
   <div style="width: 1890px; height: 1080px; position: relative; background: #F2EBEB; overflow: hidden;">
-    <div style="width: 490px; height: 450px; left: 715px; top: 219px; position: absolute; background: white; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"></div>
-    <div style="left: 715px; top: 324px; position: absolute; text-align: center; color: black; font-size: 28px; font-weight: 700; line-height: 32px; word-wrap: break-word; width: 490px;">RESET YOUR PASSWORD</div>
-    <div style="left: 773px; top: 368px; position: absolute; opacity: 0.70; text-align: center; color: black; font-size: 16px; font-weight: 400; line-height: 16px; word-wrap: break-word; width: 374px;">A code will be sent to your email to help reset password</div>    
+    <div style="width: 490px; height: 550px; left: 715px; top: 219px; position: absolute; background: white; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"></div>
+    <div style="left: 871px; top: 324px; position: absolute; text-align: center; color: black; font-size: 32px; font-weight: 700; line-height: 32px; word-wrap: break-word">WELCOME!</div>
+    <div style="left: 873px; top: 368px; position: absolute; opacity: 0.70; text-align: center; color: black; font-size: 16px; font-weight: 400; line-height: 16px; word-wrap: break-word">Sign in to your account</div>
+    <!-- Remove inline left/top and use a wrapper for centering -->
+    <div style="width: 100%; display: flex; justify-content: center; position: absolute; top: 632px;">
+      <a href="register.html" style="opacity: 0.70; text-align: center; color: #0F34CA; font-size: 16px; font-weight: 400; line-height: 16px; cursor: pointer; text-decoration: none;">create account</a>
+    </div>
     <div style="left: 773px; top: 436px; position: absolute; opacity: 0.70; text-align: center; color: black; font-size: 16px; font-weight: 400; line-height: 16px; word-wrap: break-word">Email</div>
+    <div style="left: 773px; top: 557px; position: absolute; opacity: 0.70; text-align: center; color: black; font-size: 16px; font-weight: 400; line-height: 16px; word-wrap: break-word">Password</div>
     
-    <!-- Logo -->
-    <img style="width: 192px; height: 192px; left: 858px; top: 184px; position: absolute; object-fit: contain;" src="/main/images/logo.png" alt="Logo" />
+    <!-- Logo --> 
+    <img style="width: 192px; height: 192px; left: 858px; top: 184px; position: absolute; object-fit: contain;" src="logo.png" alt="Logo" />
     
     <!-- Email input -->
     <div style="width: 374px; height: 0px; left: 773px; top: 496px; position: absolute; outline: 1px black solid; outline-offset: -0.50px;"></div>
@@ -66,13 +71,24 @@
       </div>
     </div>
 
-    <!-- Login button -->
-    <div class="login-btn" style="width: 210px; height: 40px; left: 855px; top: 520px; position: absolute; background: #FF6060; border-radius: 15px; display: flex; justify-content: center; align-items: center;" onclick="handleLogin()">
-        <div style="text-align: center; color: white; font-size: 25px; font-weight: 700; line-height: 32px; word-wrap: break-word">RESET</div>
+    <!-- Password input -->
+    <div style="width: 374px; height: 0px; left: 773px; top: 617px; position: absolute; outline: 1px black solid; outline-offset: -0.50px;"></div>
+    <div class="input-container" style="left: 773px; top: 577px; position: absolute;">
+      <input id="password-input" type="password" style="width: 354px; height: 40px; border: none; outline: none; background: transparent; font-size: 16px; color: black; padding-right: 20px;" placeholder="Enter your password" />
+      <div id="password-eye" class="eye-icon" onclick="toggleVisibility('password')">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 4.5C7 4.5 2.73 7.61 1 12C2.73 16.39 7 19.5 12 19.5C17 19.5 21.27 16.39 23 12C21.27 7.61 17 4.5 12 4.5ZM12 17C9.24 17 7 14.76 7 12C7 9.24 9.24 7 12 7C14.76 7 17 9.24 17 12C17 14.76 14.76 17 12 17ZM12 9C10.34 9 9 10.34 9 12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12C15 10.34 13.66 9 12 9Z" fill="currentColor"/>
+        </svg>
+      </div>
     </div>
-    <a href="login.html" style="left: 855px; top: 572px; position: absolute; opacity: 0.70; text-align: center; color: #0F34CA; font-size: 16px; font-weight: 400; line-height: 16px; cursor: pointer; text-decoration: none; width: 210px;">Back to Login</a>
+
+    <!-- Login button -->
+    <div class="login-btn" style="width: 210px; height: 40px; left: 855px; top: 708px; position: absolute; background: #FF6060; border-radius: 15px; display: flex; justify-content: center; align-items: center;" onclick="handleLogin()">
+        <div style="text-align: center; color: white; font-size: 25px; font-weight: 700; line-height: 32px; word-wrap: break-word">LOGIN</div>
+    </div>
   </div>    
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   <script>
     function toggleVisibility(fieldId) {
       const input = document.getElementById(`${fieldId}-input`);
@@ -99,11 +115,36 @@
 
     function handleLogin() {
       const email = document.getElementById('email-input').value;
+      let password = document.getElementById('password-input').value;
       
-      if (email) {
-        alert(`Reset attempt with email: ${email}`);
+      if (email && password) {
+        // Hash the password before sending
+        password = CryptoJS.SHA256(password).toString();
+        // Send login request to backend
+        /* fetch('https://css152l.onrender.com/api/index' */
+        fetch('https://css152l.onrender.com/api/index', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            alert(data.error);
+          } else {
+            // Login successful, redirect to inventory page
+            /* main.html */
+            window.location.href = 'main.html';
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('An error occurred during login. Please try again.');
+        });
       } else {
-        alert('Please enter your email');
+        alert('Please enter both email and password');
       }
     }
   </script>
