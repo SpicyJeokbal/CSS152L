@@ -20,6 +20,7 @@ console.log("=== THIS IS THE CORRECT SERVER FILE ===");
 // CORS configuration
 app.use(cors({
   origin: [
+    'https://css152l-render.onrender.com', 
     'https://css152l.onrender.com',
     'https://css152l-1.onrender.com',
     'http://127.0.0.1:5502',
