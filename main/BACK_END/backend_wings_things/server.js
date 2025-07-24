@@ -174,111 +174,6 @@ const PAYMONGO_HEADERS = {
   }
 };
 
-/* // Create Payment Intent
-app.post('/api/payment', async (req, res) => {
-  const {
-    name,
-    email,
-    address,
-    city,
-    province,
-    postal,
-    cardNumber,
-    expiry,
-    cvc,
-    cart
-  } = req.body;
-
-  // Validate input data
-  if (!name || !email || !address || !city || !province || !postal || !cardNumber || !expiry || !cvc || !cart || cart.length === 0) {
-    return res.status(400).json({ error: 'Missing required payment details or empty cart' });
-  }
-
-  try {
-    // Parse expiry MM/YY
-    const [exp_month, exp_yearShort] = expiry.split('/');
-    const exp_year = 2000 + parseInt(exp_yearShort);
-
-    // Step 1: Create Payment Method (card)
-    const paymentMethodResponse = await axios.post(
-      'https://api.paymongo.com/v1/payment_methods',
-      {
-        data: {
-          attributes: {
-            details: {
-              card_number: cardNumber.replace(/\s+/g, ''), // remove spaces
-              exp_month: parseInt(exp_month),
-              exp_year: exp_year,
-              cvc: cvc
-            },
-            type: 'card'
-          }
-        }
-      },
-      PAYMONGO_HEADERS
-    );
-
-    const paymentMethodId = paymentMethodResponse.data.data.id;
-
-    // Calculate total amount in centavos (PHP smallest currency unit)
-    const total = cart.reduce((sum, item) => sum + item.subtotal, 0);
-    const amount = Math.round(total * 100); // assuming subtotal is in pesos
-
-    // Step 2: Create Payment Intent
-    const paymentIntentResponse = await axios.post(
-      'https://api.paymongo.com/v1/payment_intents',
-      {
-        data: {
-          attributes: {
-            amount: amount,
-            payment_method_allowed: ['card'],
-            payment_method_options: {
-              card: {
-                request_three_d_secure: 'automatic'
-              }
-            },
-            currency: 'PHP',
-            capture_type: 'automatic'
-          }
-        }
-      },
-      PAYMONGO_HEADERS
-    );
-
-    const paymentIntentId = paymentIntentResponse.data.data.id;
-
-    // Step 3: Attach Payment Method to Intent
-    await axios.post(
-      `https://api.paymongo.com/v1/payment_intents/${paymentIntentId}/attach`,
-      {
-        data: {
-          attributes: {
-            payment_method: paymentMethodId
-          }
-        }
-      },
-      PAYMONGO_HEADERS
-    );
-
-    // Step 4: Save order details to PostgreSQL
-    await pool.query(
-      'INSERT INTO orders (customer_name, customer_email, address, city, province, postal, total_amount, payment_intent_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
-      [name, email, address, city, province, postal, total, paymentIntentId]
-    );
-
-    // Step 5: Save payment session
-    await pool.query(
-      'INSERT INTO payment_sessions (paymongo_id, cart_id, paid) VALUES ($1, $2, $3)',
-      [paymentIntentId, 1, true]
-    );
-
-    res.json({ message: 'Payment successful', paymentIntentId });
-  } catch (err) {
-    console.error('Error processing payment:', err.response?.data || err.message);
-    res.status(500).json({ error: err.response?.data || 'Internal Server Error' });
-  }
-}); */
-
 // Create GCash Payment
 app.post('/api/payment', async (req, res) => {
   const {
@@ -307,7 +202,7 @@ app.post('/api/payment', async (req, res) => {
           attributes: {
             amount: amount,
             redirect: {
-              success: 'http://localhost:3000/success.html', // Change in production
+              success: 'http://localhost:3000/thankyou.html', // Change this later
               failed: 'http://localhost:3000/failed.html'
             },
             type: 'gcash',
@@ -318,27 +213,30 @@ app.post('/api/payment', async (req, res) => {
       PAYMONGO_HEADERS
     );
 
-    const source = sourceResponse.data.data;
+    const sourceData = sourceResponse.data.data;
+    const checkoutUrl = sourceData.attributes.redirect.checkout_url;
 
     // Step 2: Save order to PostgreSQL
     await pool.query(
       'INSERT INTO orders (customer_name, customer_email, address, city, province, postal, total_amount, payment_intent_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
-      [name, email, address, city, province, postal, total, source.id]
+      [name, email, address, city, province, postal, total, sourceData.id]
     );
 
     // Optional: Save a payment session or cart ID
     await pool.query(
       'INSERT INTO payment_sessions (paymongo_id, cart_id, paid) VALUES ($1, $2, $3)',
-      [source.id, 1, false]
+      [sourceData.id, 1, false]
     );
 
-    // Step 3: Redirect to GCash checkout
-    res.json({ redirectUrl: source.attributes.redirect.checkout_url });
+    // Step 3: Send checkout URL to frontend
+    res.status(200).json({ redirectUrl: checkoutUrl });
+
   } catch (err) {
     console.error('GCash Error:', err.response?.data || err.message);
     res.status(500).json({ error: 'Payment creation failed' });
   }
 });
+
 
 
 
