@@ -174,7 +174,7 @@ const PAYMONGO_HEADERS = {
   }
 };
 
-// Create Payment Intent
+/* // Create Payment Intent
 app.post('/api/payment', async (req, res) => {
   const {
     name,
@@ -277,7 +277,70 @@ app.post('/api/payment', async (req, res) => {
     console.error('Error processing payment:', err.response?.data || err.message);
     res.status(500).json({ error: err.response?.data || 'Internal Server Error' });
   }
+}); */
+
+// Create GCash Payment
+app.post('/api/payment', async (req, res) => {
+  const {
+    name,
+    email,
+    address,
+    city,
+    province,
+    postal,
+    cart
+  } = req.body;
+
+  if (!name || !email || !address || !city || !province || !postal || !cart || cart.length === 0) {
+    return res.status(400).json({ error: 'Missing required info or empty cart' });
+  }
+
+  try {
+    const total = cart.reduce((sum, item) => sum + item.subtotal, 0);
+    const amount = Math.round(total * 100); // Convert to centavos
+
+    // Step 1: Create PayMongo GCash Source
+    const sourceResponse = await axios.post(
+      'https://api.paymongo.com/v1/sources',
+      {
+        data: {
+          attributes: {
+            amount: amount,
+            redirect: {
+              success: 'http://localhost:3000/success.html', // Change in production
+              failed: 'http://localhost:3000/failed.html'
+            },
+            type: 'gcash',
+            currency: 'PHP'
+          }
+        }
+      },
+      PAYMONGO_HEADERS
+    );
+
+    const source = sourceResponse.data.data;
+
+    // Step 2: Save order to PostgreSQL
+    await pool.query(
+      'INSERT INTO orders (customer_name, customer_email, address, city, province, postal, total_amount, payment_intent_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
+      [name, email, address, city, province, postal, total, source.id]
+    );
+
+    // Optional: Save a payment session or cart ID
+    await pool.query(
+      'INSERT INTO payment_sessions (paymongo_id, cart_id, paid) VALUES ($1, $2, $3)',
+      [source.id, 1, false]
+    );
+
+    // Step 3: Redirect to GCash checkout
+    res.json({ redirectUrl: source.attributes.redirect.checkout_url });
+  } catch (err) {
+    console.error('GCash Error:', err.response?.data || err.message);
+    res.status(500).json({ error: 'Payment creation failed' });
+  }
 });
+
+
 
 // --- Inventory Routes ---
 
