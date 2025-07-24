@@ -202,7 +202,7 @@ app.post('/api/payment', async (req, res) => {
           attributes: {
             amount: amount,
             redirect: {
-              success: 'http://localhost:3000/thankyou.html', // Change this later
+              success: 'https://css152l-render.onrender.com'/thankyou.html', // Change this later
               failed: 'http://localhost:3000/failed.html'
             },
             type: 'gcash',
